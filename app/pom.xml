@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.b2w</groupId>
+    <artifactId>b2w-game-app</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>b2w game - App</name>
+    <description>B2W Game App Backend (Modules)</description>
+    <developers>
+        <developer>
+            <name>msa</name>
+        </developer>
+    </developers>
+    <modules>
+        <module>game-swapi-client</module>
+        <module>game-planet-model</module>
+        <module>game-planet-service-api</module>
+    </modules>
+    <properties>
+        <version.maven-site>3.8.2</version.maven-site>
+        <version.doxia-core>1.9</version.doxia-core>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${version.maven-site}</version>
+                <configuration>
+                    <extensions>true</extensions>
+                    <locales>en_US, pt_BR</locales>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
+                    <finalName>${project.build.finalName}</finalName>
+                    <jarOutputDirectory>${project.artifactId}</jarOutputDirectory>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.doxia</groupId>
+                        <artifactId>doxia-core</artifactId>
+                        <version>${version.doxia-core}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
