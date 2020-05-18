@@ -2,4 +2,4 @@
 
 Answer: "I Love Kung Fu"
 
-The temple: app/game-planet-service-api/src/site/markdown
+The Dojo: ![app/game-planet-service-api/src/site/markdown](app/game-planet-service-api/src/site/markdown)
