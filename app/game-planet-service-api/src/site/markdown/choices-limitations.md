@@ -83,7 +83,7 @@ Addresses, ports and database names are maven properties. Defaults:
 
 ## Bugs
 
-- microshed-testing-core doesn't shutdown the java process 
+- microshed-testing-core doesn't shutdown the java process if there is more than one java process
 - microshed-testing-payara-micro is not working with podman
 - embedmongo-maven-plugin doesn't support versions greater than 3.4
   sometimes socket does not close
