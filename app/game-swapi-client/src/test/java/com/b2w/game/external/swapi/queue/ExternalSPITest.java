@@ -1,5 +1,5 @@
 
-package com.b2w.game.external.swapi.client;
+package com.b2w.game.external.swapi.queue;
 
 import com.b2w.game.external.swapi.model.StarWarsResponse;
 import org.testng.annotations.DataProvider;
@@ -11,8 +11,8 @@ import org.testng.annotations.Test;
  */
 public class ExternalSPITest {
 
-    private final boolean ENABLED = false;
-    private final ExternalSPI sw = new ExternalSPI();
+    private final boolean ENABLED = true;
+    private final SWAPI sw = new SWAPI();
     private static final long TIMEOUT = 10000L; // nw dependant
     
     @DataProvider(name = "valid-planet")

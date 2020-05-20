@@ -26,13 +26,12 @@ public class Configuration extends Application {
         return classes;
     }
     
-        @Override
+    @Override
     public Map<String, Object> getProperties() {
         final Map<String, Object> properties = new HashMap<>();
-        properties.put("jersey.config.server.disableJsonProcessing", true);
-        properties.put("jersey.config.disableMoxyJson", true);
-        properties.put("jersey.config.disableMetainfServicesLookup", true);
-        properties.put("jersey.config.server.provider.classnames", "org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature");
+        properties.put("CommonProperties.JSON_PROCESSING_FEATURE_DISABLE", true);
+        properties.put("CommonProperties.MOXY_JSON_FEATURE_DISABLE", true);
+        // properties.put("CommonProperties.METAINF_SERVICES_LOOKUP_DISABLE_SERVER", true);
         return properties;
     }
 }

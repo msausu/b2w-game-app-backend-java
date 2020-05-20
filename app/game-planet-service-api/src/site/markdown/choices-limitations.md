@@ -32,11 +32,10 @@ There are 3 modules for structuring the back-end:
 
 ## Decisions
 
-1. Services are not async or reactive
+1. Most services are not async
 2. No request throttling (use load-balancer)
 3. No user authentication (no specs)
-4. The swapi-client caches requests and
-   because of this is fragile (external dependency).
+4. The swapi-client caches requests (external dependency).
    The specs don't say if "number of films" could be
    part of the DB and kept in sync by another process.
 
@@ -83,7 +82,7 @@ Addresses, ports and database names are maven properties. Defaults:
 
 ## Bugs
 
-- microshed-testing-core doesn't shutdown the java process if there is more than one java process
+- microshed-testing-core (usually) doesn't shutdown the java process if there is more than one java process
 - microshed-testing-payara-micro is not working with podman
 - embedmongo-maven-plugin doesn't support versions greater than 3.4
   sometimes socket does not close

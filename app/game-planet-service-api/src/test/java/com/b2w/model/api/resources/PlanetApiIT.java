@@ -27,10 +27,10 @@ public class PlanetApiIT {
     public static ApplicationContainer app = new ApplicationContainer().withAppContextRoot("/");
 
     @RESTClient
-    public static PlanetResource planet;
+    public static PlanetResource planet; 
 
     @Test
-    @Timeout(value = 10000L * PlanetDao.MAX_RESULTS) // subject to cache
+    @Timeout(value = 10L * PlanetDao.MAX_RESULTS)
     public void listaTest() {
         Response res = planet.lista(null);
         assertEquals(OK.getStatusCode(), res.getStatus());
@@ -67,10 +67,11 @@ public class PlanetApiIT {
     public void byInvalidIdTest() {
         assertEquals(BAD_REQUEST.getStatusCode(), planet.id("%").getStatus());
     }
-    
+
     @Test
-    public void byMissingNameTest() {
-        assertEquals(NOT_FOUND.getStatusCode(), planet.lista("X").getStatus());
+    public void byMissingNomeTest() {
+        String nome = "XX_" + Math.abs(new java.util.Random().nextInt());
+        assertEquals(NOT_FOUND.getStatusCode(), planet.lista(nome).getStatus());
     }
     
     @Test

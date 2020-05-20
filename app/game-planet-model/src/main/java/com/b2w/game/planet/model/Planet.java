@@ -46,7 +46,7 @@ public class Planet implements Serializable {
     
     @Field(name = "nome")
     @Column(unique = true) // doesn't enforce index on nosql (Field should have this attr)
-    @Size(min = 1, max = 50)
+    @Size(min = 4, max = 60)
     @Pattern(regexp = NM_PAT)
     String nome;
     
