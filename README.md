@@ -1,5 +1,10 @@
 ## B2W Game
 
-Answer: "I Love Kung Fu"
+> "I Love Kung Fu"
+> - The keeper
 
-The Dojo: ![app/game-planet-service-api/src/site/markdown](app/game-planet-service-api/src/site/markdown)
+### The Dojo
+
+1. [Rules](app/game-planet-service-api/src/site/markdown/specs.md)
+2. Opponents: all those user requests
+3. [Keeper](app/game-planet-service-api/src/site/markdown/choices-limitations.md)
