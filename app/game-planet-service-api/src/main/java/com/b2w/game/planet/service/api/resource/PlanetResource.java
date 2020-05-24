@@ -6,7 +6,9 @@ import com.b2w.game.planet.model.Planet;
 import com.b2w.game.planet.model.PlanetWFilm;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -35,8 +37,36 @@ public class PlanetResource {
     @NotNull
     private PlanetWFilmDao dao;
 
-    private Response one(PlanetWFilm planet) {
-        return planet == null ? Response.status(NOT_FOUND).build() : Response.ok(planet).build();
+    /**
+     * 500 Request failed Jackson issue for a single entity:
+     * https://github.com/eclipse-ee4j/jersey/issues/3672
+     * StandardWrapperValve[com.b2w.game.planet.service.api.Configuration]:
+     * Servlet.service() for servlet
+     * com.b2w.game.planet.service.api.Configuration threw exception
+     * java.lang.IllegalArgumentException: Class
+     * com.b2w.game.planet.model.PlanetWFilm not subtype of [simple type, class
+     * java.util.concurrent.CompletableFuture<javax.ws.rs.core.Response>]
+     */
+    private Response one(PlanetDao.QryType type, String info) {
+        List<PlanetWFilm> list = new ArrayList<>();
+        PlanetWFilm planet = dao.read(type, info);
+//        switch (type) {
+//            case ID:
+//                planet = dao.idw(info);
+//                break;
+//            case NOME:
+//                planet = dao.readw(info);
+//                break;
+//        }
+        if (planet != null) {
+            list.add(planet);
+        }
+        // not a "plain entity", wrap "entity in list"
+        return list.isEmpty() ? Response.status(NOT_FOUND).build() : Response
+                .ok(new GenericEntity<List<PlanetWFilm>>(list) {
+                })
+                .status(OK)
+                .build();
     }
 
     private Response all() {
@@ -48,17 +78,21 @@ public class PlanetResource {
                 .build();
     }
 
+    /**
+     * @param nome if nome (name) is absent (null) returns all planets
+     * @return HTTP Status 200/400/404 200 -> always a list
+     */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response lista(@QueryParam("nome") @Size(min = 4, max = 60) @Pattern(regexp = Planet.NM_PAT) String nome) {
-        return nome != null ? one(dao.readw(nome)) : all();
+    public CompletableFuture<Response> lista(@QueryParam("nome") @Size(min = 1, max = 60) @Pattern(regexp = Planet.NM_PAT) final String nome) {
+        return CompletableFuture.supplyAsync(() -> nome != null ? one(PlanetDao.QryType.NOME, nome) : all());
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response id(@NotNull @PathParam("id") @Size(min = 1, max = 30) @Pattern(regexp = Planet.ID_PAT) String id) {
-        return one(dao.idw(id));
+    public CompletableFuture<Response> id(@NotNull @PathParam("id") @Size(min = 1, max = 30) @Pattern(regexp = Planet.ID_PAT) String id) {
+        return CompletableFuture.supplyAsync(() -> one(PlanetDao.QryType.ID, id));
     }
 
     @POST
@@ -83,6 +117,6 @@ public class PlanetResource {
     @DELETE
     @Path("{id}")
     public Response exclui(@NotNull @PathParam("id") @Size(min = 1, max = 30) @Pattern(regexp = Planet.ID_PAT) String id) {
-        return Response.status(dao.remove(id) ? NO_CONTENT : CONFLICT).build();
+        return Response.status(dao.remove(id) ? NO_CONTENT : GONE).build();
     }
 }

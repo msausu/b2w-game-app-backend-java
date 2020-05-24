@@ -12,8 +12,9 @@ import org.glassfish.jersey.jackson.JacksonFeature;
  * @author msa
  * @see   https://swapi.dev/
  */
-class SWAPI {
+class SWAPIClient {
 
+    public static final int SWAPI_MAX_REQ_DAY = 10_000;
     private final String SWAPI_URI = "https://swapi.dev/api/planets/", URI_PARAM = "search";
     private final Client client = ClientBuilder.newClient().register(LoggingFilter.class).register(JacksonFeature.class);
 

@@ -117,7 +117,7 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <version.eclipselink>2.7.6</version.eclipselink>
+                <version.eclipselink>2.7.7</version.eclipselink>
                 <param.jpa-provider>org.eclipse.persistence.jpa.PersistenceProvider</param.jpa-provider>
             </properties>
             <dependencies>

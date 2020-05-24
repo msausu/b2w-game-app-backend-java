@@ -1,11 +1,12 @@
-package com.b2w.model.api.resources;
+package com.b2w.game.planet.service.api.resource;
 
 import com.b2w.game.planet.dao.PlanetDao;
 import com.b2w.game.planet.model.Planet;
 import com.b2w.game.planet.model.PlanetWFilm;
-import com.b2w.game.planet.service.api.resource.PlanetResource;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.util.List;
-import javax.ws.rs.core.GenericType;
+import java.util.concurrent.ExecutionException;
 import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.Status.*;
 import org.junit.jupiter.api.Test;
@@ -27,14 +28,15 @@ public class PlanetApiIT {
     public static ApplicationContainer app = new ApplicationContainer().withAppContextRoot("/");
 
     @RESTClient
-    public static PlanetResource planet; 
-
+    public static PlanetResource planet;
+    
+    // async services
+    private final PlanetClient asyncPlanet = new PlanetClient("http://localhost:8080/api/planeta");
+    
     @Test
     @Timeout(value = 10L * PlanetDao.MAX_RESULTS)
-    public void listaTest() {
-        Response res = planet.lista(null);
-        assertEquals(OK.getStatusCode(), res.getStatus());
-        List<PlanetWFilm> list = res.readEntity(new GenericType<List<PlanetWFilm>>(){});
+    public void listaTest() throws InterruptedException, ExecutionException {
+        List<PlanetWFilm> list = asyncPlanet.getPlanetTodos();
         assertNotNull(list);
         assertTrue(list.size() > 0);
     }
@@ -58,36 +60,40 @@ public class PlanetApiIT {
     }
     
     @Test
-    public void byMissingIdTest() {
+    public void byMissingIdTest() throws InterruptedException, ExecutionException, URISyntaxException, MalformedURLException {
         String id = "" + Math.abs(new java.util.Random().nextLong());
-        assertEquals(NOT_FOUND.getStatusCode(), planet.id(id).getStatus());
+        assertThrows(javax.ws.rs.NotFoundException.class, () -> asyncPlanet.getPlanetById(id));
     }
     
     @Test
     public void byInvalidIdTest() {
-        assertEquals(BAD_REQUEST.getStatusCode(), planet.id("%").getStatus());
+        assertThrows(javax.ws.rs.BadRequestException.class, () -> asyncPlanet.getPlanetById("%25"));
+    }
+    
+    @Test
+    public void byInvalidNomeTest() {
+        assertThrows(javax.ws.rs.BadRequestException.class, () -> asyncPlanet.getPlanetByName("%25"));
     }
 
     @Test
     public void byMissingNomeTest() {
         String nome = "XX_" + Math.abs(new java.util.Random().nextInt());
-        assertEquals(NOT_FOUND.getStatusCode(), planet.lista(nome).getStatus());
+        assertThrows(javax.ws.rs.NotFoundException.class, () -> asyncPlanet.getPlanetByName(nome));
     }
     
     @Test
-    public void byNomeTest() {
-        Response res = planet.lista("Coruscant");
-        PlanetWFilm p = (PlanetWFilm)res.readEntity(PlanetWFilm.class);
-        assertEquals(OK.getStatusCode(), res.getStatus());
+    public void byNomeTest() throws InterruptedException, ExecutionException {
+        List<PlanetWFilm> p = (List<PlanetWFilm>) asyncPlanet.getPlanetByName("Coruscant");
         assertNotNull(p);
-        assertEquals("temperado", p.getClima());
+        assertFalse(p.isEmpty());
+        assertEquals("temperado", p.get(0).getClima());
     }
     
     @Test
     public void excluiTest() {
         String id = "11002"; // Champala 
-        Response res1 = planet.exclui(id), res2 = planet.id(id);
+        Response res1 = planet.exclui(id);
         assertEquals(NO_CONTENT.getStatusCode(), res1.getStatus());
-        assertEquals(NOT_FOUND.getStatusCode(), res2.getStatus());
+        assertThrows(javax.ws.rs.NotFoundException.class, () -> asyncPlanet.getPlanetById(id));
     }
 }

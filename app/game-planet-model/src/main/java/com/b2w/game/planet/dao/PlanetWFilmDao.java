@@ -4,18 +4,16 @@ import com.b2w.game.external.swapi.client.PlanetFilmCountSvc;
 import com.b2w.game.planet.model.Planet;
 import com.b2w.game.planet.model.PlanetWFilm;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import static com.b2w.game.external.swapi.client.PlanetFilmCountSvc.UNKNOWN;
 
 /**
  *
  * @author msa
  */
-@RequestScoped
 public class PlanetWFilmDao extends PlanetDao {
 
     @Inject
@@ -24,24 +22,19 @@ public class PlanetWFilmDao extends PlanetDao {
 
     @PostConstruct
     void setup() {
-        initPersistence();
+        super.initPersistence();
         svc.warmCache(list().stream().map(p -> p.getNome()).collect(Collectors.toList()));
     }
 
     public List<PlanetWFilm> listw() {
-        return list()
+        return super.list()
                 .parallelStream()
-                .map(p -> new PlanetWFilm(p, svc.getFilmCount(p.getNome()).orElse(0)))
+                .map(p -> new PlanetWFilm(p, svc.getFilmCount(p.getNome()).orElse(UNKNOWN)))
                 .collect(Collectors.toList());
     }
 
-    public PlanetWFilm readw(String name) {
-        Planet p = read(QryType.NOME, name);
-        return p == null ? null : new PlanetWFilm(p, svc.getFilmCount(name).orElse(0));
-    }
-
-    public PlanetWFilm idw(String name) {
-        Planet p = read(QryType.NOME, name);
-        return p == null ? null : new PlanetWFilm(p, svc.getFilmCount(name).orElse(0));
+    public PlanetWFilm read(@NotNull QryType type, @NotNull String name) {
+        Planet p = super.read(type, name);
+        return p == null ? null : new PlanetWFilm(p, svc.getFilmCount(name).orElse(UNKNOWN));
     }
 }

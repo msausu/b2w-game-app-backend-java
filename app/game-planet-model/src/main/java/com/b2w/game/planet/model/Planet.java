@@ -27,7 +27,7 @@ import org.eclipse.persistence.nosql.annotations.NoSql;
  */
 @Entity
 @NoSql(dataType = "planetas", dataFormat = DataFormatType.MAPPED)
-@NamedQueries({
+@NamedQueries({  
     @NamedQuery(name = QRY_BY_NOME, query = "SELECT p FROM Planet p WHERE p.nome = :nome"),
     @NamedQuery(name = QRY_BY_ID, query = "SELECT p FROM Planet p WHERE p.id = :id"),
     @NamedQuery(name = QRY_TODOS, query = "SELECT p FROM Planet p")
@@ -46,7 +46,7 @@ public class Planet implements Serializable {
     
     @Field(name = "nome")
     @Column(unique = true) // doesn't enforce index on nosql (Field should have this attr)
-    @Size(min = 4, max = 60)
+    @Size(min = 1, max = 60)
     @Pattern(regexp = NM_PAT)
     String nome;
     

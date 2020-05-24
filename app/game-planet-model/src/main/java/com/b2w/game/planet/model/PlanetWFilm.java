@@ -1,6 +1,9 @@
 
 package com.b2w.game.planet.model;
 
+import com.b2w.game.external.swapi.client.PlanetFilmCountSvc;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
@@ -12,6 +15,8 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlSeeAlso(Planet.class)
 public class PlanetWFilm extends Planet {
     
+    @Min(PlanetFilmCountSvc.UNKNOWN)
+    @Max(15) // ?
     int numFilm;
 
     public PlanetWFilm() {

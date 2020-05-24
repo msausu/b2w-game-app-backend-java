@@ -1,5 +1,5 @@
 
-package com.b2w.game.external.swapi.queue;
+package com.b2w.game.planet.service.api.resource;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -11,7 +11,7 @@ import javax.ws.rs.client.ClientRequestFilter;
  *
  * @author msa
  */
-class LoggingFilter implements ClientRequestFilter {
+public class LoggingFilter implements ClientRequestFilter {
     private static final Logger LOG = Logger.getLogger(LoggingFilter.class.getName());
 
     @Override
