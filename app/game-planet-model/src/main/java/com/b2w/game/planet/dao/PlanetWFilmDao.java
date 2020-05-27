@@ -26,7 +26,8 @@ public class PlanetWFilmDao extends PlanetDao {
         svc.warmCache(list().stream().map(p -> p.getNome()).collect(Collectors.toList()));
     }
 
-    public List<PlanetWFilm> listw() {
+    @Override
+    public List<PlanetWFilm> list() {
         return super.list()
                 .parallelStream()
                 .map(p -> new PlanetWFilm(p, svc.getFilmCount(p.getNome()).orElse(UNKNOWN)))

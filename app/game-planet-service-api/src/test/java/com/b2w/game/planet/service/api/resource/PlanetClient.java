@@ -15,7 +15,6 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 /**
  *
  * @author msa
- * @see https://swapi.dev/
  */
 class PlanetClient {
 

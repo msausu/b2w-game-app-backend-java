@@ -9,6 +9,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
@@ -36,7 +37,7 @@ public class PlanetResource {
     @Inject
     @NotNull
     private PlanetWFilmDao dao;
-
+    
     /**
      * 500 Request failed Jackson issue for a single entity:
      * https://github.com/eclipse-ee4j/jersey/issues/3672
@@ -50,27 +51,17 @@ public class PlanetResource {
     private Response one(PlanetDao.QryType type, String info) {
         List<PlanetWFilm> list = new ArrayList<>();
         PlanetWFilm planet = dao.read(type, info);
-//        switch (type) {
-//            case ID:
-//                planet = dao.idw(info);
-//                break;
-//            case NOME:
-//                planet = dao.readw(info);
-//                break;
-//        }
         if (planet != null) {
             list.add(planet);
         }
         // not a "plain entity", wrap "entity in list"
-        return list.isEmpty() ? Response.status(NOT_FOUND).build() : Response
-                .ok(new GenericEntity<List<PlanetWFilm>>(list) {
-                })
-                .status(OK)
-                .build();
+        return list.isEmpty() ? 
+                Response.status(NOT_FOUND).build() : 
+                Response.ok(new GenericEntity<List<PlanetWFilm>>(list) {}).status(OK).build();
     }
 
     private Response all() {
-        List<PlanetWFilm> list = dao.listw();
+        List<PlanetWFilm> list = (List<PlanetWFilm>)dao.list();
         return Response
                 .ok(new GenericEntity<List<PlanetWFilm>>(list) {
                 })
@@ -84,14 +75,14 @@ public class PlanetResource {
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public CompletableFuture<Response> lista(@QueryParam("nome") @Size(min = 1, max = 60) @Pattern(regexp = Planet.NM_PAT) final String nome) {
+    public CompletionStage<Response> lista(@QueryParam("nome") @Size(min = 1, max = 60) @Pattern(regexp = Planet.NM_PAT) final String nome) {
         return CompletableFuture.supplyAsync(() -> nome != null ? one(PlanetDao.QryType.NOME, nome) : all());
     }
 
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public CompletableFuture<Response> id(@NotNull @PathParam("id") @Size(min = 1, max = 30) @Pattern(regexp = Planet.ID_PAT) String id) {
+    public CompletionStage<Response> id(@NotNull @PathParam("id") @Size(min = 1, max = 30) @Pattern(regexp = Planet.ID_PAT) String id) {
         return CompletableFuture.supplyAsync(() -> one(PlanetDao.QryType.ID, id));
     }
 

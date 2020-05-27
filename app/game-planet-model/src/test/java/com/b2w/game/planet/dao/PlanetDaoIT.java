@@ -1,6 +1,7 @@
 package com.b2w.game.planet.dao;
 
-import static com.b2w.game.planet.dao.PlanetDao.QryType.*;
+import static com.b2w.game.planet.dao.Dao.QryType.ID;
+import static com.b2w.game.planet.dao.Dao.QryType.NOME;
 import com.b2w.game.planet.model.Planet;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ import org.testng.annotations.Test;
  */
 public class PlanetDaoIT {
 
-    private PlanetDao dao;
+    private Dao<Planet> dao;
     private final List<Planet> planets = new ArrayList<>();
     private final Random rnd = new Random();
     private static final String NAME = "n_";
@@ -28,7 +29,7 @@ public class PlanetDaoIT {
     @BeforeClass
     void setup() {
         dao = new PlanetDao();
-        dao.initPersistence();
+        ((PlanetDao)dao).initPersistence();
         IntStream.rangeClosed(0, SAMPLE_SIZE).forEach(p -> planets.add(p, planet(p)));
     }
 
@@ -67,7 +68,7 @@ public class PlanetDaoIT {
     void removeTest() {
         boolean res = planets
                 .stream()
-                .map(p -> dao.read(NOME, p.getNome()))
+                .map(p -> dao.<Planet>read(NOME, p.getNome()))
                 .map(p -> dao.remove(p.getId()))
                 .reduce(Boolean::logicalAnd)
                 .orElse(Boolean.FALSE);

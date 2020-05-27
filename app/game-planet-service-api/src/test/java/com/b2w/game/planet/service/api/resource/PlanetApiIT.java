@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import javax.ws.rs.core.Response;
 import static javax.ws.rs.core.Response.Status.*;
+import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Timeout;
@@ -31,7 +32,7 @@ public class PlanetApiIT {
     public static PlanetResource planet;
     
     // async services
-    private final PlanetClient asyncPlanet = new PlanetClient("http://localhost:8080/api/planeta");
+    private PlanetClient asyncPlanet = new PlanetClient("http://localhost:8080/api/planeta");
     
     @Test
     @Timeout(value = 10L * PlanetDao.MAX_RESULTS)

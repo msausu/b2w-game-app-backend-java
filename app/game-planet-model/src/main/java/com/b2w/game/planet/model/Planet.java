@@ -133,14 +133,14 @@ public class Planet implements Serializable {
     // debug: json 
     @Override
     public String toString() {
-        return "{" + qs("id", id) + qs("nome", nome) + qs("clima", clima) + q("terreno:", terreno) + '}';
+        return "{" + kv("id", id) + kv("nome", nome) + kv("clima", clima) + kv_("terreno:", terreno) + '}';
     }
     
-    private String q(String k, String v) {
+    private String kv_(String k, String v) {
         return "\"" + k + "\":\"" + v + "\"";
     }
     
-    private String qs(String k, String v) {
-        return q(k, v) + ",";
+    private String kv(String k, String v) {
+        return kv_(k, v) + ",";
     }
 }

@@ -31,7 +31,7 @@ public class PlanetDaoLoadIT {
     
     @Test(enabled = true, dependsOnMethods = {"loadWriteTest"}, timeOut = (PlanetDao.MAX_RESULTS * 20L))
     void loadReadTest() {
-        List<Planet> list = dao.list();
+        List<? extends Planet> list = dao.list();
         assert list.size() == PlanetDao.MAX_RESULTS : "load test failed size " + list.size() + " != " + PlanetDao.MAX_RESULTS;
     }
 
