@@ -24,6 +24,7 @@ public class Configuration extends Application {
         classes.add(JacksonFeature.class);
         classes.add(JacksonJaxbJsonProvider.class);
         classes.add(ObjectMapperResolver.class);
+        classes.add(CORSFilter.class);
         classes.add(PlanetResource.class);
         return classes;
     }
