@@ -18,7 +18,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.game-swapi-client>1.0.0</version.game-swapi-client>
         <version.javaee>8.0</version.javaee>
-        <version.testng>7.1.0</version.testng>
+        <version.testng>7.7.0</version.testng>
         <version.maven-failsafe>2.22.2</version.maven-failsafe>
         <version.maven-jxr-plugin>3.0.0</version.maven-jxr-plugin>
         <version.maven-site>3.8.2</version.maven-site>
