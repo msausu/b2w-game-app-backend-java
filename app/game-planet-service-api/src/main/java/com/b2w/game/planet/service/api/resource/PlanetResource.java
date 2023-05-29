@@ -71,7 +71,7 @@ public class PlanetResource {
 
     /**
      * @param nome if nome (name) is absent (null) returns all planets
-     * @return HTTP Status 200/400/404 200 -> always a list
+     * @return HTTP Status 200/400/404 200 always a list
      */
     @GET
     @Produces({MediaType.APPLICATION_JSON})

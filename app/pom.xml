@@ -18,7 +18,7 @@
         <module>game-planet-service-api</module>
     </modules>
     <properties>
-        <version.maven-site>3.8.2</version.maven-site>
+        <version.maven-site>4.0.0-M8</version.maven-site>
         <version.doxia-core>1.9</version.doxia-core>
     </properties>
     <build>
